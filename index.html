@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="itqan.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>إتقان | حاسبة تسعير المنصة</title>
+    <style>
+        :root {
+            --primary: #5b5bff;
+            --secondary: #7a3cff;
+            --bg: #0f1220;
+            --card: #161a2f;
+            --text: #e8e8ff;
+            --muted: #b8b8e6;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto
+        }
+
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #0f1220, #14183a);
+            color: var(--text);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 24px
+        }
+
+        /* ===== HEADER ===== */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 16px
+        }
+
+        .brand img {
+            width: 64px;
+            height: 64px;
+            border-radius: 14px
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap
+        }
+
+        .actions a {
+            padding: 10px 14px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600
+        }
+
+        /* ===== CARD ===== */
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 18px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
+            margin-bottom: 16px
+        }
+
+        h2,
+        h3 {
+            margin-top: 0
+        }
+
+        /* ===== SLIDER ===== */
+        .slider-wrapper {
+            overflow: hidden
+        }
+
+        .slider {
+            display: flex;
+            gap: 14px;
+            transition: transform .5s ease
+        }
+
+        .slide {
+            min-width: 260px;
+            height: 180px;
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .watermark {
+            position: absolute;
+            bottom: 8px;
+            right: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            opacity: .6
+        }
+
+        /* ===== GRID ===== */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px
+        }
+
+        @media(max-width:900px) {
+            .grid {
+                grid-template-columns: 1fr
+            }
+        }
+
+        /* ===== FORM ===== */
+        .row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px
+        }
+
+        @media(max-width:600px) {
+            .row {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px
+        }
+
+        .field label {
+            color: var(--muted)
+        }
+
+        .field input,
+        .field select {
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #2a2f5a;
+            background: #0f1330;
+            color: var(--text)
+        }
+
+        .btn {
+            margin-top: 12px;
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            color: #fff;
+            background: linear-gradient(135deg, var(--primary), var(--secondary))
+        }
+
+        /* ===== TABLE ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th,
+        td {
+            padding: 10px 6px;
+            border-bottom: 1px solid #2a2f5a;
+            text-align: center
+        }
+
+        th {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        /* Responsive table */
+        @media(max-width:600px) {
+            table {
+                font-size: 12px;
+            }
+
+            th,
+            td {
+                padding: 8px 4px;
+            }
+        }
+
+        /* Result styles */
+        .result {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .result .pill {
+            background: #0f1330;
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .result .price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #7cf;
+            text-align: center;
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(91, 91, 255, 0.2), rgba(122, 60, 255, 0.2));
+            border-radius: 12px;
+        }
+
+        .profit-info {
+            background: #1a2040;
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 8px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .profit-info strong {
+            color: #7f7;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            margin-top: 32px;
+            padding: 20px;
+            border-top: 1px solid #2a2f5a;
+            text-align: center;
+            color: var(--muted);
+            display: grid;
+            gap: 8px
+        }
+
+        footer a {
+            color: #9aa3ff;
+            text-decoration: none
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header class="topbar">
+            <div class="brand">
+                <img src="itqan.png" alt="Itqan Logo" />
+                <div>
+                    <h1>إتقان</h1>
+                    <p>نظام ذكي لإدارة المحتوى التعليمي باحتراف</p>
+                </div>
+            </div>
+            <div class="actions">
+                <a href="tel:+201011413143">📞 اتصال</a>
+                <a href="https://wa.me/201011413143" target="_blank">💬 واتساب</a>
+                <a href="mailto:itqan7135@gmail.com">✉️ إيميل</a>
+            </div>
+        </header>
+
+        <!-- ===== WORKS SLIDER ===== -->
+        <div class="card" id="sliderCard">
+            <h2>نماذج من أعمال إتقان</h2>
+            <div class="slider-wrapper">
+                <div class="slider" id="worksSlider"></div>
+            </div>
+            <button class="btn" id="shareBtn">🔗 مشاركة الأعمال مع المدرس</button>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h2>المدخلات</h2>
+                <div class="row">
+                    <div class="field">
+                        <label>عدد الطلاب المتوقع</label>
+                        <input id="students" type="number" value="250" min="1" />
+                    </div>
+                    <div class="field">
+                        <label>تكلفتك الشهرية (جنيه)</label>
+                        <input id="cost" type="number" value="4300" />
+                    </div>
+                    <div class="field">
+                        <label>هامش الربح %</label>
+                        <input id="margin" type="number" value="30" />
+                    </div>
+                </div>
+                <div class="row" style="margin-top:10px">
+                    <div class="field">
+                        <label>نوع المحتوى</label>
+                        <select id="contentType">
+                            <option value="recorded">حصص مسجلة</option>
+                            <option value="live">لايف مباشر</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>السعر الثابت (تصوير + مونتاج)</label>
+                        <select id="wantsUpfront">
+                            <option value="yes">يدفع سعر ثابت</option>
+                            <option value="no">بدون سعر ثابت</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn" id="calc">احسب السعر</button>
+            </div>
+
+            <div class="card">
+                <h2>النتيجة</h2>
+                <div class="result">
+                    <div class="pill"><strong>نوع المدرس:</strong> <span id="type">—</span></div>
+                    <div class="price" id="price">—</div>
+                    <div class="pill"><strong>التوصية:</strong> <span id="recommend">—</span></div>
+                    <div class="profit-info" id="profitInfo"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+            <h2>جدول الأسعار الرسمي</h2>
+            <div style="overflow-x:auto">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>الفئة</th>
+                            <th>عدد الطلاب</th>
+                            <th>السعر الثابت</th>
+                            <th>سعر الكود</th>
+                            <th>النوع المفضل</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="tag small">مدرس صغير</span></td>
+                            <td>أقل من 500</td>
+                            <td>3000 جـ</td>
+                            <td><strong>5 جـ</strong></td>
+                            <td>مسجل</td>
+                        </tr>
+                        <tr style="background:#1a1f35">
+                            <td><span class="tag small">مدرس صغير</span></td>
+                            <td>أقل من 500</td>
+                            <td>بدون</td>
+                            <td><strong>10 جـ</strong></td>
+                            <td>مسجل</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag mid">متوسط منخفض</span></td>
+                            <td>500 - 700</td>
+                            <td>1500 جـ</td>
+                            <td><strong>8-10 جـ</strong></td>
+                            <td>مسجل</td>
+                        </tr>
+                        <tr style="background:#1a1f35">
+                            <td><span class="tag mid">متوسط منخفض</span></td>
+                            <td>500 - 700</td>
+                            <td>بدون</td>
+                            <td><strong>13-15 جـ</strong></td>
+                            <td>مسجل</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag mid">متوسط عالي</span></td>
+                            <td>700 - 1000</td>
+                            <td>—</td>
+                            <td><strong>15 جـ</strong></td>
+                            <td>لايف</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag big">مدرس كبير</span></td>
+                            <td>أكثر من 1000</td>
+                            <td>—</td>
+                            <td><strong>20 جـ</strong></td>
+                            <td>لايف + ترويج</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p style="color:#b8b8e6;font-size:13px;margin-top:10px">💡 اللايف بيزود +3 جـ على سعر الكود</p>
+        </div>
+        <div class="card" style="margin-top:16px">
+            <h2>سكريبتات الإقناع والردود الجاهزة</h2>
+            <p style="color:#b8b8e6">استخدم الجُمل دي أثناء المكالمات أو الاجتماعات حسب حالة المدرس.</p>
+
+            <h3>🟢 مدرس صغير</h3>
+            <ul>
+                <li>"إنت دلوقتي بتبني اسمك، وإحنا موفّرين لك استوديو، مونتاج، منصة، وتيم ميديا يشتغل مكانك."</li>
+                <li>"بدل ما تدفع في كل حاجة لوحدها، الباقة بتجمع لك كل ده وتريحك."</li>
+            </ul>
+
+            <h3>🟡 مدرس متوسط</h3>
+            <ul>
+                <li>"إحنا سيبناك تختار: يا كود مباشر من غير مقدم، يا باقة تقلل السعر على الطالب."</li>
+                <li>"الطالب بيدفع أقل من حصة، وإنت بتكبر عدد طلابك من غير مجهود."</li>
+            </ul>
+
+            <h3>🔵 مدرس كبير</h3>
+            <ul>
+                <li>"إنت مش محتاج تدفع مقدم، إحنا بنستثمر في اسمك."</li>
+                <li>"إحنا بنزود انتشارك بالميديا والترويج، مش بس منصة."</li>
+            </ul>
+
+            <h3>❌ اعتراضات متوقعة والرد عليها</h3>
+            <ul>
+                <li><strong>السعر عالي:</strong> "الطالب بيدفع أقل من حصة، وإنت واخد منظومة كاملة (منصة + استوديو +
+                    ميديا)."
+                </li>
+                <li><strong>مش واثق في المنصة:</strong> "إحنا مش مجرد منصة، ده استوديو حقيقي وتيم شغال معاك خطوة بخطوة."
+                </li>
+                <li><strong>عايز أجرب:</strong> "نبدأ بنظام مناسب لحالتك، ولو النتائج مرضية نكمل فورًا."</li>
+            </ul>
+
+            <h3>🎥 جمل إلزام اختيار لايف أو مسجل</h3>
+            <ul>
+                <li><strong>إجبار لايف:</strong> "بما إن عدد طلابك كبير، اللايف هيطلع أفضل نتيجة ليك من حيث التفاعل
+                    والانتشار،
+                    والمسجل هنا هيضيّع قوة اسمك."</li>
+                <li><strong>إجبار مسجل:</strong> "في مرحلتك الحالية، المسجل أنجح ليك لأنه يبني محتوى ثابت ويخلّي أي لايف
+                    بعد
+                    كده
+                    ينجح."</li>
+                <li>"إحنا بنحدد النوع حسب الأرقام، مش حسب الرغبة."</li>
+            </ul>
+
+            <h3>🤝 جمل بناء الثقة</h3>
+            <ul>
+                <li>"إحنا استثمارنا الحقيقي إنك تنجح، علشان كده بنختار النظام اللي يطلعك كسبان."</li>
+                <li>"عندنا استوديو وتجهيزات على الأرض، مش وعود."</li>
+                <li>"إحنا شريك تشغيل، مش جهة بتبيع خدمة وتمشي."</li>
+            </ul>
+        </div>
+    </div>
+
+    <script type="module">
+
+        const works = [
+            'https://picsum.photos/id/1011/600/400',
+            'https://picsum.photos/id/1015/600/400',
+            'https://picsum.photos/id/1025/600/400'
+        ];
+        const slider = document.getElementById('worksSlider');
+        works.forEach(src => {
+            const d = document.createElement('div');
+            d.className = 'slide';
+            d.innerHTML = `<img src="${src}"><div class="watermark">Itqan</div>`;
+            slider.appendChild(d);
+        });
+        let i = 0;
+        setInterval(() => { i = (i + 1) % works.length; slider.style.transform = `translateX(-${i * 274}px)` }, 3000);
+
+        /* ===== SHARE ===== */
+        document.getElementById('shareBtn').onclick = () => {
+            const shareUrl = location.origin + location.pathname + '?view=works';
+
+            // محاولة نسخ
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(shareUrl).then(() => {
+                    alert('تم نسخ رابط الأعمال فقط 👌');
+                }).catch(() => {
+                    prompt('انسخ الرابط ده وابعته للمدرس:', shareUrl);
+                });
+            } else {
+                prompt('انسخ الرابط ده وابعته للمدرس:', shareUrl);
+            }
+        };
+
+    /**
+     * ملاحظة: الكود مكتوب بأسلوب TypeScript عبر JSDoc للأنواع
+     */
+    /** @type {HTMLInputElement} */ const students = document.getElementById('students');
+    /** @type {HTMLInputElement} */ const cost = document.getElementById('cost');
+    /** @type {HTMLInputElement} */ const margin = document.getElementById('margin');
+        const priceEl = document.getElementById('price');
+        const typeEl = document.getElementById('type');
+        const recEl = document.getElementById('recommend');
+
+        const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+        function calculate() {
+            const s = Math.max(1, Number(students.value));
+            const monthlyCost = Math.max(0, Number(cost.value));
+            const profitMargin = clamp(Number(margin.value), 0, 100) / 100;
+            const contentType = document.getElementById('contentType').value;
+            const isLive = contentType === 'live';
+            const wantsUpfront = document.getElementById('wantsUpfront').value === 'yes';
+
+            let type = '';
+            let priceText = '';
+            let rec = '';
+            let upfront = 0;
+            let baseCodePrice = 0; // السعر الأساسي حسب الفئة
+
+            // ===== مدرس صغير (أقل من 500) =====
+            if (s < 500) {
+                type = 'مدرس صغير 🟢';
+                if (wantsUpfront) {
+                    upfront = 3000;
+                    baseCodePrice = 5;
+                    rec = '✅ سعر ثابت 3000 جـ = كود 5 جـ فقط – حصص مسجلة لبناء الاسم';
+                } else {
+                    upfront = 0;
+                    baseCodePrice = 10;
+                    rec = '⚠️ بدون سعر ثابت = كود 10 جـ – حصص مسجلة لبناء الاسم';
+                }
+            }
+            // ===== مدرس متوسط (500 - 1000) =====
+            else if (s <= 1000) {
+                type = 'مدرس متوسط 🟡';
+
+                // متوسط منخفض (500-700)
+                if (s <= 700) {
+                    if (wantsUpfront) {
+                        upfront = 1500;
+                        if (s <= 550) baseCodePrice = 8;
+                        else if (s <= 620) baseCodePrice = 9;
+                        else baseCodePrice = 10;
+                        rec = `✅ سعر ثابت 1500 جـ = كود ${baseCodePrice} جـ – حصص مسجلة`;
+                    } else {
+                        upfront = 0;
+                        if (s <= 550) baseCodePrice = 13;
+                        else if (s <= 620) baseCodePrice = 14;
+                        else baseCodePrice = 15;
+                        rec = `⚠️ بدون سعر ثابت = كود ${baseCodePrice} جـ – حصص مسجلة`;
+                    }
+                }
+                // متوسط عالي (700-1000)
+                else {
+                    upfront = 0;
+                    baseCodePrice = 15;
+                    rec = '📺 لايف مباشر – لزيادة التفاعل والمبيعات';
+                }
+            }
+            // ===== مدرس كبير (أكثر من 1000) =====
+            else {
+                type = 'مدرس كبير 🔵';
+                upfront = 0;
+                baseCodePrice = 20;
+                rec = '🚀 لايف + ترويج مكثف – لزيادة الانتشار والمبيعات';
+            }
+
+            // ===== تعديلات على سعر الكود =====
+            let codePriceAdjustment = 0;
+            let adjustmentNotes = [];
+
+            // تعديل حسب نوع المحتوى (اللايف أغلى)
+            if (isLive) {
+                codePriceAdjustment += 3;
+                adjustmentNotes.push('🎥 +3 جـ (لايف مباشر)');
+            }
+
+            // ===== حساب سعر الكود المقترح حسب التكلفة والهامش =====
+            // السعر المقترح = (التكلفة الشهرية × (1 + هامش الربح)) / عدد الطلاب
+            const suggestedCodePrice = Math.ceil((monthlyCost * (1 + profitMargin)) / s);
+
+            // السعر بعد التعديلات
+            const adjustedBasePrice = baseCodePrice + codePriceAdjustment;
+
+            // استخدام الأعلى بين السعر المعدل والمقترح
+            const finalCodePrice = Math.max(adjustedBasePrice, suggestedCodePrice);
+            const isUsingBase = finalCodePrice === adjustedBasePrice;
+
+            // حساب الأرباح بالسعر النهائي
+            const monthlyRevenue = s * finalCodePrice;
+            const netProfit = monthlyRevenue - monthlyCost;
+            const profitWithMargin = netProfit * (1 + profitMargin);
+            const breakEvenMonths = upfront > 0 ? Math.ceil(upfront / Math.max(1, netProfit)) : 0;
+
+            // عرض النتيجة
+            if (upfront > 0) {
+                priceText = `سعر ثابت ${upfront.toLocaleString()} جـ + كود ${finalCodePrice} جـ`;
+            } else {
+                priceText = `بدون سعر ثابت + كود ${finalCodePrice} جـ`;
+            }
+
+            typeEl.textContent = type;
+            priceEl.textContent = priceText;
+            recEl.textContent = rec;
+
+            // معلومات الربح
+            const profitInfoEl = document.getElementById('profitInfo');
+
+            // تحديد حالة السعر
+            let priceNote = '';
+            let adjustmentText = adjustmentNotes.length > 0 ? `<br>📝 <strong>التعديلات:</strong> ${adjustmentNotes.join(' | ')}` : '';
+
+            if (suggestedCodePrice > adjustedBasePrice) {
+                priceNote = `<br>⚠️ <strong style="color:#ff7">سعر الكود المعدل (${adjustedBasePrice} جـ) لا يغطي تكاليفك!</strong><br>
+                💡 <strong style="color:#7f7">السعر المقترح: ${suggestedCodePrice} جـ</strong> (لتغطية التكلفة + الهامش)`;
+            } else if (suggestedCodePrice < adjustedBasePrice) {
+                priceNote = `<br>✅ <strong style="color:#7f7">سعر الكود المعدل (${adjustedBasePrice} جـ) يغطي تكاليفك بشكل ممتاز!</strong>`;
+            }
+
+            profitInfoEl.innerHTML = `
+                💵 <strong>سعر الكود الأساسي:</strong> ${baseCodePrice} جـ
+                ${adjustmentText}
+                <br>🏷️ <strong>سعر الكود النهائي:</strong> <span style="color:#7cf;font-size:1.2em">${finalCodePrice} جـ</span>
+                ${priceNote}
+                <hr style="border-color:#2a2f5a;margin:10px 0">
+                📊 <strong>الإيراد الشهري المتوقع:</strong> ${monthlyRevenue.toLocaleString()} جـ<br>
+                💰 <strong>صافي الربح الشهري:</strong> ${netProfit.toLocaleString()} جـ<br>
+                📈 <strong>الربح مع الهامش (${margin.value}%):</strong> ${Math.round(profitWithMargin).toLocaleString()} جـ
+                ${upfront > 0 ? `<br>⏱️ <strong>استرداد السعر الثابت:</strong> ${breakEvenMonths} شهر` : ''}
+            `;
+        }
+
+        document.getElementById('calc').addEventListener('click', calculate);
+        calculate();
+
+        // ===== VIEW WORKS ONLY MODE =====
+        // When URL has ?view=works, show only the slider and hide everything else (except header/footer)
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('view') === 'works') {
+            const sliderCard = document.getElementById('sliderCard');
+
+            // Hide grid (inputs and results)
+            const grid = document.querySelector('.grid');
+            if (grid) grid.style.display = 'none';
+
+            // Hide all cards except slider
+            document.querySelectorAll('.card').forEach(card => {
+                if (card.id !== 'sliderCard') {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Hide share button in slider view
+            const shareBtn = document.getElementById('shareBtn');
+            if (shareBtn) shareBtn.style.display = 'none';
+
+            // Center the slider card
+            if (sliderCard) {
+                sliderCard.style.maxWidth = '800px';
+                sliderCard.style.margin = '50px auto';
+            }
+        }
+
+    </script>
+    <footer
+        style="margin-top:24px;padding:20px;border-top:1px solid #2a2f5a;display:grid;gap:8px;text-align:center;color:#b8b8e6">
+        <strong style="color:#e8e8ff">Itqan</strong>
+        <div>🌐 <a href="https://itqan.com" target="_blank">itqan.com</a></div>
+        <div>✉️ <a href="mailto:itqan7135@gmail.com">itqan7135@gmail.com</a></div>
+        <div>📞 Manager: Zain Eldeen — <a href="https://wa.me/201011413143" target="_blank">WhatsApp</a> | <a
+                href="tel:+201011413143">Call</a></div>
+        <div style="font-size:13px;opacity:.8">© جميع الحقوق محفوظة لمنصة إتقان</div>
+    </footer>
+
+</body>
+
+</html>
